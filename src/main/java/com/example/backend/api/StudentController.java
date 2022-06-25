@@ -1,0 +1,52 @@
+package com.example.backend.api;
+
+import com.example.backend.dto.StudentDTO;
+import com.example.backend.entity.Student;
+import com.example.backend.message.BaseResponse;
+import com.example.backend.service.StudentService;
+import com.example.backend.util.Constant;
+import com.example.backend.util.MessageUtils;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.bridge.MessageUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/student")
+@Slf4j
+public class StudentController {
+
+    private final StudentService studentService;
+
+    @GetMapping("find/{id}")
+    public ResponseEntity<BaseResponse> getStudent(@PathVariable Integer id) {
+        BaseResponse result = studentService.findStudentById(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<BaseResponse> getAll() {
+        BaseResponse result = studentService.findAllStudent();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/insert")
+    public ResponseEntity<BaseResponse> insertStudent(@RequestBody StudentDTO studentDTO) {
+        BaseResponse result = studentService.insertStudent(studentDTO);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<BaseResponse> updateStudent(@RequestBody StudentDTO studentDTO) {
+        BaseResponse result = studentService.updateStudent(studentDTO);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+}
