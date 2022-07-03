@@ -16,6 +16,8 @@ public class StudentDTO {
 
     private Integer id;
 
+    private String summerCourseName;
+
     private String name;
 
     private String dharmaName; // pháp danh
@@ -34,7 +36,7 @@ public class StudentDTO {
 
     private String relativePhone; // số điện thoại người thân
 
-    private String appartmentNumber; // số nhà
+    private String apartmentNumber; // số nhà
 
     private String ward; // phường/xã
 
@@ -52,7 +54,7 @@ public class StudentDTO {
 
     private String conduct; // hạnh kiểm
 
-    private String academicAability; // học lực
+    private String academicAbility; // học lực
 
     private String summerCourseId;
 
