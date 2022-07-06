@@ -1,27 +1,21 @@
 package com.example.backend.api;
 
 import com.example.backend.dto.StudentDTO;
-import com.example.backend.entity.Student;
 import com.example.backend.message.BaseResponse;
 import com.example.backend.service.StudentService;
-import com.example.backend.util.Constant;
-import com.example.backend.util.MessageUtils;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.bridge.MessageUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/student")
 @Slf4j
+@CrossOrigin
 public class StudentController {
 
     private final StudentService studentService;
