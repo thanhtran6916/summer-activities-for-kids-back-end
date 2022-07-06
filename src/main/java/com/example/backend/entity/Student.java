@@ -48,7 +48,7 @@ public class Student extends BaseEntity {
     private String relativePhone; // số điện thoại người thân
 
     @Column(name = "APARTMENT_NUMBER")
-    private String appartmentNumber; // số nhà
+    private String apartmentNumber; // số nhà
 
     @Column(name = "WARD")
     private String ward; // phường/xã
@@ -75,7 +75,7 @@ public class Student extends BaseEntity {
     private String conduct; // hạnh kiểm
 
     @Column(name = "ACADEMIC_ABILITY")
-    private String academicAability; // học lực
+    private String academicAbility; // học lực
 
     @Column(name = "SUMMER_COURSE_ID")
     private String summerCourseId;
