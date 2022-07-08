@@ -9,16 +9,18 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,24 +32,106 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public String genStudentsPass(MultipartFile fileExcel) {
-        String result = "";
         try {
+            String result = "";
             // lấy danh sách học sinh trong file excel
             List<StudentDTO> studentDTOSInput = getInputStudentsExcel(fileExcel);
             // lọc học sinh đạt
             List<StudentDTO> studentDTOSPass = filterStudentPass(studentDTOSInput);
+            System.out.println(studentDTOSPass);
 
             // trả ra file excel danh sách học sinh đạt
-            result = getExcelNameStudentPass(studentDTOSPass);
+//            result = getExcelNameStudentPass(studentDTOSPass);
+            return result;
         } catch (Exception e) {
             log.info(e.getMessage());
-            return result;
+            return null;
         }
-        return result;
     }
 
     private String getExcelNameStudentPass(List<StudentDTO> studentDTOSPass) {
-        return null;
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Học sinh đạt");
+
+        int rowCount = 2;
+
+        for (StudentDTO studentDTO : studentDTOSPass) {
+            Row row = sheet.createRow(++rowCount);
+
+            for (int i = 0; i < 15; i++) {
+                Cell cell = row.createCell(i);
+                switch (i) {
+                    case 0:
+                        cell.setCellValue(studentDTO.getId());
+                        break;
+                    case 1: {
+                        cell.setCellValue(studentDTO.getCreatedDate());
+                        break;
+                    }
+                    case 2:
+                        cell.setCellValue(studentDTO.getName());
+                        break;
+                    case 3:
+                        cell.setCellValue(studentDTO.getDharmaName());
+                        break;
+                    case 4:
+                        cell.setCellValue(studentDTO.getGender());
+                        break;
+                    case 5:
+                        cell.setCellValue(studentDTO.getYearBirth());
+                        break;
+                    case 6:
+                        cell.setCellValue(studentDTO.getRelativeName());
+                        break;
+                    case 7:
+                        cell.setCellValue(studentDTO.getRelativePhone());
+                        break;
+                    case 8:
+                        cell.setCellValue(studentDTO.getAddress());
+                        break;
+                    case 9:
+                        cell.setCellValue(studentDTO.getNumberOfParticipation());
+                        break;
+                    case 10:
+                        cell.setCellValue(studentDTO.getHealthCondition());
+                        break;
+                    case 11:
+                        cell.setCellValue(studentDTO.getConduct());
+                        break;
+                    case 12:
+                        cell.setCellValue(studentDTO.getSummerCourseName());
+                        break;
+                    case 13:
+                        cell.setCellValue(studentDTO.getIntroducePerson());
+                        break;
+                    case 14:
+                        cell.setCellValue(studentDTO.getIntroducePersonPhone());
+                        break;
+                    case 15:
+                        cell.setCellValue(studentDTO.getStatus());
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+
+
+        try (FileOutputStream outputStream = new FileOutputStream("JavaBooks.xlsx")) {
+            workbook.write(outputStream);
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+            return null;
+        } finally {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private List<StudentDTO> filterStudentPass(List<StudentDTO> studentDTOSInput) {
@@ -196,5 +280,30 @@ public class ExcelServiceImpl implements ExcelService {
             studentDTOS.add(studentDTO);
         }
         return studentDTOS;
+    }
+
+    public String zipFile(){
+//        File sourceFile = new File("D:\\summer-activities-for-kids-back-end\\src\\main\\resources\\static\\file\\test.txt");
+        try {
+            FileInputStream fis = new FileInputStream("D:\\summer-activities-for-kids-back-end\\src\\main\\resources\\static\\file\\test.txt");
+            File outputFile = new File("D:\\summer-activities-for-kids-back-end\\src\\main\\resources\\static\\file\\test.zip");
+            FileOutputStream fio = new FileOutputStream(outputFile);
+            ZipOutputStream zipOut = new ZipOutputStream(fio);
+            ZipEntry zipEntry = new ZipEntry("D:\\summer-activities-for-kids-back-end\\src\\main\\resources\\static\\file\\test.txt");
+            zipOut.putNextEntry(zipEntry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fis.read(bytes)) > 0) {
+                zipOut.write(bytes, 0, length);
+            }
+
+            zipOut.close();
+            fis.close();
+            fio.close();
+            return "D:\\summer-activities-for-kids-back-end\\src\\main\\resources\\static\\file\\test.zip";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
