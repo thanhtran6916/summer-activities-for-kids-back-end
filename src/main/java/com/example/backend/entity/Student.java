@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "STUDENT")
 public class Student extends BaseEntity {
 
     @Id
