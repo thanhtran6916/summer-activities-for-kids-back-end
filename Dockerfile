@@ -1,6 +1,5 @@
-FROM maven:latest
-RUN mkdir /summer-activity-backend
-WORKDIR /summer-activity-backend
-COPY . .
-EXPOSE 7200
-CMD ["mvn", "spring-boot:run"]
+FROM adoptopenjdk/openjdk11:alpine-jre
+COPY ./src/main/resources/templates/* /templates
+COPY ./target/*.jar /app.jar
+ENTRYPOINT ["java", "-jar" ,"/app.jar"]
+EXPOSE 8080
