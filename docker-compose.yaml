@@ -1,29 +1,29 @@
-version: '3'
-services:
-  postgres:
-    image: postgres
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    #      - ./doker.sql:/docker-entrypoint-initdb.d/doker.sql
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=docker_spring_boot
-      - PGDATA=/var/lib/postgresql/data/postgres-data
-    ports:
-      - "7000:5432"
-    restart: always
-  web:
-    image: docker-spring-boot:latest
-    ports:
-      - "8005:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/docker_spring_boot
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=123456
-    restart: always
-    depends_on:
-      - postgres
-
-volumes:
-  postgres-data:
+#version: '3'
+#services:
+#  postgres:
+#    image: postgres
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    #      - ./doker.sql:/docker-entrypoint-initdb.d/doker.sql
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=123456
+#      - POSTGRES_DB=docker_spring_boot
+#      - PGDATA=/var/lib/postgresql/data/postgres-data
+#    ports:
+#      - "7000:5432"
+#    restart: always
+#  web:
+#    image: docker-spring-boot:latest
+#    ports:
+#      - "8005:8080"
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/docker_spring_boot
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=123456
+#    restart: always
+#    depends_on:
+#      - postgres
+#
+#volumes:
+#  postgres-data:
