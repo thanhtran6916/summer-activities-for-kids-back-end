@@ -1,0 +1,27 @@
+name: Auto deploy production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }} #hostname of server
+          username: ${{ secrets.USERNAME }} #username login to server
+          password: ${{ secrets.PASSWORD }} #password login to server
+          port: ${{ secrets.PORT }} #port of server - often port is 22
+          script: | # run with multiple script
+            #cd worker
+            #git clone https://github.com/thanhtran6916/summer-activities-for-kids-back-end.git
+            #git pull origin master
+            #cd summer-activities-for-kids-back-end
+            #mvn clean install
+            #docker build -t auto-deploy .
+            #docker-compose up -d
