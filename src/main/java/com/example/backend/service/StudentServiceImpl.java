@@ -46,7 +46,7 @@ public class StudentServiceImpl implements StudentService {
             if (student.isPresent()) {
                 baseResponse.setData(student.get());
             } else {
-                baseResponse.setMessage("student.find.by.id.empty");
+                baseResponse.setMessage(MessageUtils.getMessage("student.find.by.id.empty"));
             }
         } catch (Exception e) {
             baseResponse.setMessage(MessageUtils.getMessage("student.find.by.id.error", id));
