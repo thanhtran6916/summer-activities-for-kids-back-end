@@ -18,11 +18,10 @@ jobs:
           password: ${{ secrets.PASSWORD }} #password login to server
           port: ${{ secrets.PORT }} #port of server - often port is 22
           script: | # run with multiple script
-            cd worker
-            git clone https://github.com/thanhtran6916/summer-activities-for-kids-back-end.git
-            git checkout develop
+            cd uat-ldz/app/summer-activities-for-kids-back-end/
             git pull origin develop
-            cd summer-activities-for-kids-back-end
             mvn clean install
             docker build -t summer-activity .
+            cd ~
+            cd uat-ldz/docker-compose/app-summer-activity/
             docker-compose up -d
