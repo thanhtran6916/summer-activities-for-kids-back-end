@@ -20,7 +20,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping("find/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<BaseResponse> getStudent(@PathVariable Integer id) {
         BaseResponse result = studentService.findStudentById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
