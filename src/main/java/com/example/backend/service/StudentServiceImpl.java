@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.dto.StudentDTO;
 import com.example.backend.entity.Student;
-import com.example.backend.exception.CustomException;
 import com.example.backend.mapper.StudentMapper;
 import com.example.backend.message.BaseResponse;
 import com.example.backend.repository.StudentRepository;
@@ -56,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
         return baseResponse;
     }
 
-    public BaseResponse insertStudent(StudentDTO studentDTO) {
+    public BaseResponse createStudent(StudentDTO studentDTO) {
         BaseResponse baseResponse = new BaseResponse();
         try {
             studentDTO = studentMapper.toStudentDTO(

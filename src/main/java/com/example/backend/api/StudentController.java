@@ -32,9 +32,9 @@ public class StudentController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/create")
     public ResponseEntity<BaseResponse> insertStudent(@RequestBody StudentDTO studentDTO) {
-        BaseResponse result = studentService.insertStudent(studentDTO);
+        BaseResponse result = studentService.createStudent(studentDTO);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
