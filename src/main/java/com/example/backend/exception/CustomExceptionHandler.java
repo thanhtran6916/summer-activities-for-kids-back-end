@@ -12,11 +12,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice
 @Slf4j
@@ -26,6 +29,20 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CustomCodeException.class)
     protected BaseResponse customCodeException(CustomCodeException custom) {
         return custom.getBaseResponse();
+    }
+
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value
+            = { Exception.class })
+    protected ResponseEntity<Object> handleConflict(
+            RuntimeException ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
+        BaseResponse response = BaseResponse.builder()
+                .errorCode(INTERNAL_SERVER_ERROR.toString())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
     }
 
     @Override

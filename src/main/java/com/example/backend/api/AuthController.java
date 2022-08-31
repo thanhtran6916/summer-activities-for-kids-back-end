@@ -34,10 +34,10 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody UserRequest userRequest) {
         try {
             Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
             JwtResponse jwtResponse = jwtService.createTokenLogin(userPrincipal);

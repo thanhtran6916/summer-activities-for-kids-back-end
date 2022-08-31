@@ -11,8 +11,11 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.util.Constant;
 import com.example.backend.util.MessageUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,22 +72,39 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @SneakyThrows
     @Override
     public UserDTO changeUsernameAndPassword(UserRequest userRequest) {
-        try {
-            UserDTO userDuplicate = findByUsername(userRequest.getUsername());
-            if (!ObjectUtils.isEmpty(userDuplicate)) {
-                log.info("CHANGE USER DUPLICATE =====>>> " + Constant.gson.toJson(userRequest));
-                throw new CustomCodeException(BaseResponse
-                        .builder()
-                        .errorCode(String.valueOf(HttpStatus.CONFLICT.value()))
-                        .message(MessageUtils.getMessage("change.user.fail"))
-                        .build());
-            }
+        // Lấy thông tin user hiện tại
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        UserDTO userCurrent = findByUsername(userPrincipal.getUsername());
+        if (ObjectUtils.isEmpty(userCurrent)) {
+            log.info("CHANGE USER EMPTY =====>>> " + Constant.gson.toJson(userRequest));
+            throw new CustomCodeException(BaseResponse
+                    .builder()
+                    .errorCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                    .message(MessageUtils.getMessage("user.empty"))
+                    .build());
+        }
 
+        // check duplicate user
+        UserDTO userDuplicate = findByUsername(userRequest.getUsername());
+        if (!ObjectUtils.isEmpty(userDuplicate)) {
+            log.info("CHANGE USER DUPLICATE =====>>> request " + Constant.gson.toJson(userRequest) + " : " + Constant.gson.toJson(userDuplicate));
+            throw new CustomCodeException(BaseResponse.builder()
+                    .errorCode(String.valueOf(HttpStatus.CONFLICT.value()))
+                    .message(MessageUtils.getMessage("change.user.duplicate"))
+                    .build());
+        }
+
+        // update new username and password
+        try {
             User user = new User();
             user.setUsername(userRequest.getUsername());
             user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            user.setId(userCurrent.getId());
+            user.setRoles(userCurrent.getRoles());
 
             user = userRepository.save(user);
             user.setPassword(null);
