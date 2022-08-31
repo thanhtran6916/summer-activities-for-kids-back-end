@@ -1,8 +1,19 @@
 package com.example.backend.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.lang.reflect.Modifier;
+
 public class Constant {
 
+    public static Gson gson = new GsonBuilder().setDateFormat(Common.COMMON_DATETIME_FORMAT).excludeFieldsWithModifiers(Modifier.STATIC).create();
     public static String ERROR_CODE = "-1";
+
+    public static class Common {
+        public static final String REGISTER_ROLE = "[{\"id\":1,\"name\":\"ROLE_ADMIN\"}]";
+        public static final String COMMON_DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    }
 
     public static class RULE_STUDENT {
         public static String HANH_KIEM_TOT = "tot";
