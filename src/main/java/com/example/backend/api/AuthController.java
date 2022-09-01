@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @Slf4j
@@ -34,19 +33,23 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<BaseResponse> login(@Valid @RequestBody UserRequest userRequest) {
+        BaseResponse response = new BaseResponse();
         try {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
             JwtResponse jwtResponse = jwtService.createTokenLogin(userPrincipal);
+            response.setData(jwtResponse);
 
-            return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.getMessage();
         }
-        return new ResponseEntity<>(JwtResponse.builder().message(MessageUtils.getMessage("login.fail")).build(), HttpStatus.UNAUTHORIZED);
+        response.setErrorCode(Constant.ERROR_CODE);
+        response.setMessage(MessageUtils.getMessage("login.fail"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")

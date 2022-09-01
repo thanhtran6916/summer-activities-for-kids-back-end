@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/student")
 @Slf4j
-@CrossOrigin
 public class StudentController {
 
     private final StudentService studentService;

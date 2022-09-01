@@ -68,6 +68,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 .data(errorModel.getDetails())
                 .build();
 
-        return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 }

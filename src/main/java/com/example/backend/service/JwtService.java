@@ -34,7 +34,6 @@ public class JwtService {
                 .roles(Constant.gson.toJson(userPrincipal.getAuthorities()))
                 .token(token)
                 .expiresTime(expiresTime)
-                .message(MessageUtils.getMessage("login.success"))
                 .build();
     }
 

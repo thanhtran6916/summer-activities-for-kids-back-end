@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("excel")
-@CrossOrigin
 public class ExcelController {
 
     private final ExcelService excelService;

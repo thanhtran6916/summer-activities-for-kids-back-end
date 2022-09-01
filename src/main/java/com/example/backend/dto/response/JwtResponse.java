@@ -23,6 +23,4 @@ public class JwtResponse {
     private Date expiresTime;
 
     private String roles;
-
-    private String message;
 }
