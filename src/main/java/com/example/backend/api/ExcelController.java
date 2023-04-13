@@ -70,9 +70,4 @@ public class ExcelController {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-
-    @GetMapping
-    public ResponseEntity<?> push() {
-        return ResponseEntity.ok("");
-    }
 }
